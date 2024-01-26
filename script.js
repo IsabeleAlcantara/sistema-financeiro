@@ -2,16 +2,16 @@ const tbody = document.querySelector("tbody");
 const descItem = document.querySelector("#desc");
 const amount = document.querySelector("#amount");
 const type = document.querySelector("#type");
-const btnNew = document.querySelector("btnNew");
+const btnNew = document.querySelector("#btnNew");
 
-const incomes = document.querySelector("#.incomes");
+const incomes = document.querySelector(".incomes");
 const expenses = document.querySelector(".expenses");
 const total = document.querySelector(".total");
 
 let items;
 
-btnNew.onClick = () => {
-    if (descItem.value === "" || amount.value ==="" || type.value ==="") {
+btnNew.onclick = () => {
+    if (descItem.value === "" || amount.value === "" || type.value === "") {
         return alert("Preencha todos os campos!");
   }
 
@@ -19,14 +19,16 @@ btnNew.onClick = () => {
     desc: descItem.value,
     amount: Math.abs(amount.value).toFixed(2),
     type: type.value,
+
   });
 
 
   setItensBD();
 
   loadItens();
-   descItem.value ="";
-   amount.value ="";
+   descItem.value = "";
+   amount.value = "";
+
 };
 
 function deleteItem(index) {
@@ -34,8 +36,6 @@ function deleteItem(index) {
     setItensBD();
     loadItens();
 }
-
-
 
 function insertItem(item, index) {
     let tr = document.createElement("tr");
@@ -46,10 +46,10 @@ function insertItem(item, index) {
     <td class="columnType">${
         item.type === "Entrada"
         ? '<i class="bx bxs-chevron-up-circle"></i>'
-        : '<i class="bx bxs-chevron-down-circle></i>'
+        : '<i class="bx bxs-chevron-down-circle"></i>'
     }</td>
     <td class="columnAction">
-     <button onClick="deleteItem(${index})"><i class='bx bx-trash'></i></button>
+     <button onclick="deleteItem(${index})"><i class='bx bx-trash'></i></button>
      </td>
     `;
 
@@ -67,7 +67,7 @@ function getTotals() {
     .map((transaction) => Number(transaction.amount));
 
    const totalIncomes = amountIncomes 
-   .reduce ((acc, cur) => acc = cur, 0)
+   .reduce ((acc, cur) => acc + cur, 0)
    .toFixed(2);
 
    const totalExpenses = Math.abs(
@@ -77,7 +77,7 @@ function getTotals() {
    const totalItems = (totalIncomes - totalExpenses).toFixed(2);
 
    incomes.innerHTML = totalIncomes;
-   expenses.innerHTML = totalexpensives;
+   expenses.innerHTML = totalExpenses;
    total.innerHTML = totalItems;
 }
 
@@ -86,13 +86,14 @@ function loadItens() {
     items = getItensBD();
     tbody.innerHTML = "";
     items.forEach((item, index) => {
-        insertIte(item, index);
+        insertItem(item, index);
     });
+   
     getTotals();
 }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
 
-const getItensBD = () => JSON.parse(localStorage.getItem("db_items")) ?? [];
-const setItensBD = () => 
+    const getItensBD = () => JSON.parse(localStorage.getItem("db_items")) ?? [];
+    const setItensBD = () => 
      localStorage.setItem("db_items", JSON.stringify(items));
     
      loadItens();
